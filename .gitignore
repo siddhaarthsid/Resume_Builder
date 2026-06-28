@@ -1,0 +1,39 @@
+# Dependency directories
+node_modules/
+**/node_modules/
+
+# Puppeteer local chrome binaries
+backend/chrome/
+chrome/
+
+# Production build outputs
+dist/
+build/
+out/
+
+# Environment variables (contains sensitive secrets/credentials)
+.env
+.env.local
+.env.*.local
+**/ .env
+backend/.env
+
+# IDE / Editor configuration files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
