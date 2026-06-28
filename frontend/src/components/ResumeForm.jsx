@@ -1,6 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 function ResumeForm({ data, onChange, activeTab, setActiveTab }) {
+  const [skillsText, setSkillsText] = useState(data.skills ? data.skills.join(', ') : '');
+
+  // Sync external profile data updates into the local skills text state
+  useEffect(() => {
+    const parentSkillsJoined = data.skills ? data.skills.join(', ') : '';
+    // Normalize spaces and empty values to check if they actually differ
+    const parsedCurrent = skillsText.split(',').map(s => s.trim()).filter(Boolean).join(', ');
+    const parsedParent = data.skills ? data.skills.map(s => s.trim()).filter(Boolean).join(', ') : '';
+    if (parsedParent !== parsedCurrent) {
+      setSkillsText(parentSkillsJoined);
+    }
+  }, [data.skills]);
 
   // Helper to update root level fields
   const handleFieldChange = (e) => {
@@ -48,8 +60,10 @@ function ResumeForm({ data, onChange, activeTab, setActiveTab }) {
 
   // Skill specific helpers
   const handleSkillsChange = (e) => {
-    const skillsString = e.target.value;
-    const skillsArray = skillsString.split(',').map(s => s.trim()).filter(Boolean);
+    const value = e.target.value;
+    setSkillsText(value); // Update local state immediately to preserve typing (commas/spaces)
+    
+    const skillsArray = value.split(',').map(s => s.trim()).filter(Boolean);
     onChange({ ...data, skills: skillsArray });
   };
 
@@ -420,7 +434,7 @@ function ResumeForm({ data, onChange, activeTab, setActiveTab }) {
               <label className="form-label">Skills (separated by commas)</label>
               <textarea 
                 className="form-textarea" 
-                value={data.skills.join(', ')} 
+                value={skillsText} 
                 onChange={handleSkillsChange} 
                 placeholder="Enter skills separated by commas..."
                 style={{ minHeight: '150px' }}
